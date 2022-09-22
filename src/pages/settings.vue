@@ -1,5 +1,9 @@
 <script setup lang="ts">
-const inputString = ref(null as any)
+import { storeToRefs } from 'pinia'
+import { useGoatStore } from '~/store/goatAPI'
+const goatStore = useGoatStore()
+const { filterText } = useGoatStore()
+const { thresholdString, topNString } = storeToRefs(goatStore)
 </script>
 
 <template>
@@ -21,13 +25,14 @@ const inputString = ref(null as any)
         Threshold Time (in sec):
       </div>
       <input
-        v-model="inputString"
+        v-model="thresholdString"
         name="a"
         class="shadow border rounded"
         maxlength="256"
         style="color:black; width: 80px; text-align: right;"
         type="number"
         placeholder="300"
+        @input="filterText"
       >
     </div>
 
@@ -36,13 +41,14 @@ const inputString = ref(null as any)
         Display Top N Items:
       </div>
       <input
-        v-model="inputString"
+        v-model="topNString"
         name="a"
         class="shadow border rounded"
         maxlength="256"
         style="color:black; width: 60px; text-align: right;"
         type="number"
         placeholder="5"
+        @input="filterText"
       >
     </div>
 

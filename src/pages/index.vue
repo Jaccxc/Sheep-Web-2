@@ -2,10 +2,10 @@
 import { storeToRefs } from 'pinia'
 import Datepicker from 'vue3-datepicker'
 import { useGoatStore } from '~/store/goatAPI'
+import 'vue3-image-viewer/dist/style.css'
 const goatStore = useGoatStore()
-const { getTopNfromDate, buttonTest } = useGoatStore()
-const { APIdata } = storeToRefs(goatStore)
-const dateToRequest = '2022/09/05'
+const { getTopNfromDate, getAllfromDate, buttonTest } = useGoatStore()
+const { APIdata, nullAPIData } = storeToRefs(goatStore)
 const selected = ref(new Date())
 const N = 20
 getTopNfromDate(N, selected.value)
@@ -33,7 +33,8 @@ getTopNfromDate(N, selected.value)
         border-radius: 8px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
         max-width: 200px; height: 30px;
         --vdp-hover-bg-color : #813d9c; --vdp-bg-color: #ffffffcc; --vdp-border-radius: 7px;
-        --vdp-heading-hover-color : #ffffff33; --vdp-hover-bg-color : #4572b933; --vdp-selected-bg-color : #1c71d8"
+        --vdp-heading-hover-color : #ffffff33; --vdp-hover-bg-color : #4572b933; --vdp-selected-bg-color : #1c71d8;
+        --vdp-hover-color : #3453b2"
       />
       <button class="text-3 bg-blue-200 rounded rounded-3 m-x-5 text-black p-x-3" @click="getTopNfromDate(N, selected)">
         Fetch
@@ -45,9 +46,15 @@ getTopNfromDate(N, selected.value)
       <div class="flex flex-col items-center">
         <ul>
           <div>
+            <div v-if="nullAPIData">
+              Currently no data on this day
+            </div>
             <li v-for="(entity, index) in APIdata" :key="index">
               P{{ index }}. Goat-ID : {{ entity.ID }} Duration : {{ entity.DURATION.minute }} min. {{ entity.DURATION.second }} sec. Img ID : {{ entity.IMG_ID }}
-              <button class="text-3 bg-blue-200 rounded rounded-3 p-1 m-1 text-black p-x-3" @click="buttonTest(parseInt(entity.IMG_ID))">
+              <button
+                class="text-3 bg-blue-200 rounded rounded-3 p-1 m-1 text-black p-x-3"
+                @click="buttonTest(parseInt(entity.IMG_ID))"
+              >
                 Image
               </button>
             </li>
@@ -55,7 +62,10 @@ getTopNfromDate(N, selected.value)
         </ul>
       </div>
       <div>
-        <button class="text-3 bg-blue-400 rounded rounded-3 p-1 m-5 m-x-3 text-white p-x-3">
+        <button
+          class="text-3 bg-blue-400 rounded rounded-3 p-1 m-5 m-x-3 text-white p-x-3"
+          @click="getAllfromDate(selected)"
+        >
           Get All Data
         </button>
       </div>

@@ -20,8 +20,12 @@ export const useGoatStore = defineStore('user', () => {
     second: string
   }
 
+  const APIurl = 'http://jacc.tw:5000/getTopN'
   const loading = ref(false)
   const APIdata = ref([] as trackerData[])
+  const nullAPIData = ref(true)
+  const thresholdString = ref('')
+  const topNString = ref('')
   // const APIimage = ref()
 
   function setLoader(value: boolean) {
@@ -30,19 +34,44 @@ export const useGoatStore = defineStore('user', () => {
     loading.value = value
   }
 
-  function getTopNfromDate(topN: number, dateObj: Date) {
+  function processDateString(dateObj: Date) {
     const yearString = dateObj.getFullYear().toString()
     const monthString = '0'.concat((dateObj.getMonth() + 1).toString()).slice(-2)
     const dayString = '0'.concat(dateObj.getDate().toString()).slice(-2)
     const sepString = '/'
-    const dateToRequest = yearString.concat(sepString).concat(monthString).concat(sepString).concat(dayString)
-    console.log(dateToRequest)
-    const url = 'http://sheeped01.ddns.net:5000/getTopN'
+    const result = yearString.concat(sepString).concat(monthString).concat(sepString).concat(dayString)
+    return result
+  }
+
+  function getTopNfromDate(topN: number, dateObj: Date) {
+    const dateToRequest = processDateString(dateObj)
     setLoader(true)
-    axios.get(url, { params: { N: topN, date: dateToRequest } }).then((res) => {
+    axios.get(APIurl, { params: { N: topN, date: dateToRequest } }).then((res) => {
       APIdata.value = res.data
+      if (APIdata.value[1] === undefined)
+        nullAPIData.value = true
+      else
+        nullAPIData.value = false
+      setLoader(false)
     })
-    setLoader(false)
+  }
+
+  function getAllfromDate(dateObj: Date) {
+    const dateToRequest = processDateString(dateObj)
+    setLoader(true)
+    axios.get(APIurl, { params: { N: 99999, date: dateToRequest } }).then((res) => {
+      APIdata.value = res.data
+      if (APIdata.value[1] === undefined)
+        nullAPIData.value = true
+      else
+        nullAPIData.value = false
+      setLoader(false)
+    })
+  }
+
+  function filterText() {
+    thresholdString.value.replace(/[^0-9]/g, '')
+    topNString.value.replace(/[^0-9]/g, '')
   }
 
   // function getImage(value: number) {
@@ -52,14 +81,20 @@ export const useGoatStore = defineStore('user', () => {
   function buttonTest(valueN: number) {
     // eslint-disable-next-line no-console
     console.log(valueN)
+    window.open('http://localhost:5000/getImage?IMG_ID='.concat(valueN.toString()))
   }
 
   return {
     APIdata,
     getTopNfromDate,
+    getAllfromDate,
     setLoader,
     loading,
     buttonTest,
+    nullAPIData,
+    filterText,
+    thresholdString,
+    topNString,
     // getImage,
   }
 })
