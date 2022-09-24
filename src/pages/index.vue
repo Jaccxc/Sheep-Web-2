@@ -2,12 +2,12 @@
 import { storeToRefs } from 'pinia'
 import Datepicker from 'vue3-datepicker'
 import { useGoatStore } from '~/store/goatAPI'
-import 'vue3-image-viewer/dist/style.css'
 const goatStore = useGoatStore()
-const { getTopNfromDate, getAllfromDate, buttonTest } = useGoatStore()
+const { getTopNfromDate, getAllfromDate, getImageFromImageID, removePaddingZero } = useGoatStore()
 const { APIdata, nullAPIData } = storeToRefs(goatStore)
 const selected = ref(new Date())
 const N = 20
+
 getTopNfromDate(N, selected.value)
 </script>
 
@@ -20,9 +20,7 @@ getTopNfromDate(N, selected.value)
     </div>
 
     <p text-3xl>
-      <a rel="noreferrer" href="https://github.com/antfu/vitesse" target="_blank">
-        Goat Detection and Tracking Database
-      </a>
+      Goat Detection and Tracking Database
     </p>
     <div py-3 />
     <div text-xl text-black flex justify-center>
@@ -49,15 +47,67 @@ getTopNfromDate(N, selected.value)
             <div v-if="nullAPIData">
               Currently no data on this day
             </div>
-            <li v-for="(entity, index) in APIdata" :key="index">
-              P{{ index }}. Goat-ID : {{ entity.ID }} Duration : {{ entity.DURATION.minute }} min. {{ entity.DURATION.second }} sec. Img ID : {{ entity.IMG_ID }}
-              <button
-                class="text-3 bg-blue-200 rounded rounded-3 p-1 m-1 text-black p-x-3"
-                @click="buttonTest(parseInt(entity.IMG_ID))"
-              >
-                Image
-              </button>
-            </li>
+            <div v-else>
+              <div class="table text-4.5">
+                <div class="w-5.5rem" />
+                <div class="w-6rem text-center table-cell v-middle">
+                  Goat ID
+                </div>
+                <div class="w-8.5rem text-center table-cell v-middle">
+                  Duration
+                </div>
+                <div class="w-6rem text-center table-cell v-middle">
+                  Img ID
+                </div>
+              </div>
+              <li v-for="(entity, index) in APIdata" :key="index">
+                <div class=" flex flex-row justify-center my-6 px-15 bg-white rounded-2 op-85 drop-shadow shadow-xl text-black text-op-80">
+                  <div class="table">
+                    <div class="text-right table-cell v-middle">
+                      P{{ index }}.
+                    </div>
+                  </div>
+                  <div class="table">
+                    <div class="shadow-inner shadow-2xl w-60px text-right table-cell v-middle">
+                      {{ entity.ID }}
+                    </div>
+                  </div>
+                  <div class="text-right flex flex-row">
+                    <div class="flex flex-row">
+                      <div class="table">
+                        <div class="text-right w-60px table-cell v-middle">
+                          {{ removePaddingZero(entity.DURATION.minute) }}
+                        </div>
+                      </div>
+                      <div table>
+                        <div class="text-right w-35px table-cell v-middle text-4 text-black-g text-op-50">
+                          min.
+                        </div>
+                      </div>
+                      <div table>
+                        <div class="text-right w-35px table-cell v-middle">
+                          {{ removePaddingZero(entity.DURATION.second) }}
+                        </div>
+                      </div>
+                      <div table>
+                        <div class="text-right w-35px table-cell v-middle text-4 text-black-g text-op-50">
+                          sec.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="table">
+                    <div class="w-70px text-right table-cell v-middle">
+                      {{ entity.IMG_ID }}
+                    </div>
+                  </div>
+                  <div w-35px />
+                  <button class="shadow-inner shadow-2xl text-3 bg-blue-200 rounded rounded-3 p-1 m-1 text-black p-x-3" @click="getImageFromImageID(entity.IMG_ID)">
+                    Image
+                  </button>
+                </div>
+              </li>
+            </div>
           </div>
         </ul>
       </div>

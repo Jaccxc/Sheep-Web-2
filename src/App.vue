@@ -8,12 +8,12 @@ import { useGoatStore } from './store/goatAPI'
 const props = useGoatStore()
 
 useHead({
-  title: 'Vitesse',
+  title: 'Goat',
   meta: [
-    { name: 'description', content: 'Opinionated Vite Starter Template' },
+    { name: 'description', content: 'Website for Goat Detection system' },
     {
       name: 'theme-color',
-      content: computed(() => true ? '#00aba9' : '#ffffff'),
+      content: computed(() => true ? '#FF3CAC' : '#FF3CAC'),
     },
   ],
   link: [

@@ -20,7 +20,7 @@ export const useGoatStore = defineStore('user', () => {
     second: string
   }
 
-  const APIurl = 'http://jacc.tw:5000/getTopN'
+  const APIurl = 'http://sheeped01.ddns.net:5000/getTopN'
   const loading = ref(false)
   const APIdata = ref([] as trackerData[])
   const nullAPIData = ref(true)
@@ -46,7 +46,8 @@ export const useGoatStore = defineStore('user', () => {
   function getTopNfromDate(topN: number, dateObj: Date) {
     const dateToRequest = processDateString(dateObj)
     setLoader(true)
-    axios.get(APIurl, { params: { N: topN, date: dateToRequest } }).then((res) => {
+    axios.get(APIurl, { params: { N: topN, date: dateToRequest } }).then(async (res) => {
+      await delay(200 + Math.floor(Math.random() * 500))
       APIdata.value = res.data
       if (APIdata.value[1] === undefined)
         nullAPIData.value = true
@@ -57,16 +58,7 @@ export const useGoatStore = defineStore('user', () => {
   }
 
   function getAllfromDate(dateObj: Date) {
-    const dateToRequest = processDateString(dateObj)
-    setLoader(true)
-    axios.get(APIurl, { params: { N: 99999, date: dateToRequest } }).then((res) => {
-      APIdata.value = res.data
-      if (APIdata.value[1] === undefined)
-        nullAPIData.value = true
-      else
-        nullAPIData.value = false
-      setLoader(false)
-    })
+    getTopNfromDate(999, dateObj)
   }
 
   function filterText() {
@@ -74,14 +66,21 @@ export const useGoatStore = defineStore('user', () => {
     topNString.value.replace(/[^0-9]/g, '')
   }
 
-  // function getImage(value: number) {
+  function delay(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms))
+  }
 
-  // }
+  function removePaddingZero(data: string) {
+    if (data[0] === '0')
+      return data[1]
+    else
+      return data
+  }
 
-  function buttonTest(valueN: number) {
+  function getImageFromImageID(valueN: string) {
     // eslint-disable-next-line no-console
     console.log(valueN)
-    window.open('http://localhost:5000/getImage?IMG_ID='.concat(valueN.toString()))
+    window.open('http://sheeped01.ddns.net:5000/getImage?IMG_ID='.concat(valueN))
   }
 
   return {
@@ -90,11 +89,12 @@ export const useGoatStore = defineStore('user', () => {
     getAllfromDate,
     setLoader,
     loading,
-    buttonTest,
+    getImageFromImageID,
     nullAPIData,
     filterText,
     thresholdString,
     topNString,
+    removePaddingZero,
     // getImage,
   }
 })
