@@ -2,8 +2,9 @@
 import { storeToRefs } from 'pinia'
 import { useGoatStore } from '~/store/goatAPI'
 const goatStore = useGoatStore()
-const { filterText } = useGoatStore()
-const { thresholdString, topNString } = storeToRefs(goatStore)
+const { saveLocal, isNumber, initLocal } = useGoatStore()
+const { thresholdAccumInput, thresholdDurationInput, thresholdDuration, thresholdAccum, topN, topNInput } = storeToRefs(goatStore)
+initLocal()
 </script>
 
 <template>
@@ -22,37 +23,52 @@ const { thresholdString, topNString } = storeToRefs(goatStore)
     <div py-2 />
     <div class="flex items-center justify-center">
       <div text-5 p-2>
-        Threshold Time (in sec):
+        Threshold Time for Duration (in sec):
       </div>
       <input
-        v-model="thresholdString"
+        v-model.number="thresholdDurationInput"
         name="a"
         class="shadow border rounded"
         maxlength="256"
         style="color:black; width: 80px; text-align: right;"
         type="number"
-        placeholder="300"
-        @input="filterText"
+        :placeholder="thresholdDuration.toString()"
+        @keypress="isNumber($event)"
       >
     </div>
 
+    <div py-2 />
+    <div class="flex items-center justify-center">
+      <div text-5 p-2>
+        Threshold Time for Accumulation (in sec):
+      </div>
+      <input
+        v-model.number="thresholdAccumInput"
+        type="number"
+        class="shadow border rounded"
+        maxlength="256"
+        style="color:black; width: 80px; text-align: right;"
+        :placeholder="thresholdAccum.toString()"
+        @keypress="isNumber($event)"
+      >
+    </div>
+    <div py-2 />
     <div class="flex items-center justify-center">
       <div text-5 p-2>
         Display Top N Items:
       </div>
       <input
-        v-model="topNString"
-        name="a"
+        v-model="topNInput"
+        type="number"
         class="shadow border rounded"
         maxlength="256"
-        style="color:black; width: 60px; text-align: right;"
-        type="number"
-        placeholder="5"
-        @input="filterText"
+        style="color:black; width: 80px; text-align: right;"
+        :placeholder="topN.toString()"
+        @keypress="isNumber($event)"
       >
     </div>
 
-    <button class="text-3 bg-blue-400 rounded rounded-3 p-1 m-5 m-x-3 text-white p-x-3">
+    <button class="text-3 bg-blue-400 rounded rounded-3 p-1 m-5 m-x-3 text-white p-x-3" @click="saveLocal">
       Save Changes
     </button>
   </div>
