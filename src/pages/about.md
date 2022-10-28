@@ -11,9 +11,9 @@ title: About
 
 ## Introduction
 
-[This system](https://github.com/Jaccxc/Sheep-Detection) is an goat detection system focusing on real-world camera analysis. Core technologies include [YoloV7](https://github.com/WongKinYiu/yolov7) for goat bounding with real-world fisheye lens camera images, [DeepSORT](https://github.com/nwojke/deep_sort) for object tracking, implemented with [Kalman Filter](https://github.com/nwojke/deep_sort/blob/master/deep_sort/kalman_filter.py) and [NearestNeigborMatching](https://github.com/nwojke/deep_sort/blob/master/deep_sort/nn_matching.py).
+This system is an goat detection system focusing on real-world camera analysis. Core technologies include [YoloV7](https://github.com/WongKinYiu/yolov7) for goat bounding with real-world fisheye lens camera images, [DeepSORT](https://github.com/nwojke/deep_sort) for object tracking, implemented with [Kalman Filter](https://github.com/nwojke/deep_sort/blob/master/deep_sort/kalman_filter.py) and [NearestNeigborMatching](https://github.com/nwojke/deep_sort/blob/master/deep_sort/nn_matching.py).
 
-As goats are tracked, the data are stored in the database using [SQLite3](https://www.sqlite.org/index.html). With a python server as the API server, we are able to fetch data from the database. The server also acts as a [Web Server](https://github.com/Jaccxc/Sheep-Web-2), which is implemented with [antfu's Vitesse](https://github.com/antfu/vitesse) with [Vue3](https://github.com/vuejs/core), [Typescript](https://www.typescriptlang.org/), [Pinia](https://pinia.vuejs.org/).
+As goats are tracked, the data are stored in the database using [SQLite3](https://www.sqlite.org/index.html). With a python server as the API server, we are able to fetch data from the database. The server also acts as a Web Server, which is implemented with [antfu's Vitesse](https://github.com/antfu/vitesse) with [Vue3](https://github.com/vuejs/core), [Typescript](https://www.typescriptlang.org/), [Pinia](https://pinia.vuejs.org/).
 
 ---
 
@@ -66,4 +66,3 @@ cd ~/Sheep-Detection/web/Sheep-Web-2/
 sudo docker run --rm -it -p 80:80 -p 443:443 -p 8080:8080 vitesse:latest
 ```
 
-Check out the [GitHub repo](https://github.com/Jaccxc/Sheep-Detection) for more details.

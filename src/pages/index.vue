@@ -52,6 +52,10 @@ getTopNfromDate(topN.value, selected.value)
                 <div class="w-80px text-center table-cell v-middle">
                   羊隻編號
                 </div>
+                <div class="w-20px" />
+                <div class="w-100px text-center table-cell v-middle">
+                  出現時間
+                </div>
                 <div class="w-35px" />
                 <div class="w-160px text-center table-cell v-middle">
                   單次連續出現時長
@@ -75,6 +79,15 @@ getTopNfromDate(topN.value, selected.value)
                   <div class="table">
                     <div class="shadow-inner shadow-2xl w-80px p-r-20px text-right table-cell v-middle">
                       {{ entity.ID }}
+                    </div>
+                  </div>
+                  <div class="text-right flex flex-row">
+                    <div class="flex flex-row text-right min-w-120px max-w-120px p-r-15px p-l-5px m-1 rounded rounded-4">
+                      <div class="table">
+                        <div class="text-right table-cell v-middle ">
+                          {{ removePaddingZero(entity.LOG_TIME.hour) }} : {{ removePaddingZero(entity.LOG_TIME.minute) }} :{{ removePaddingZero(entity.LOG_TIME.second) }}
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <div class="text-right flex flex-row">

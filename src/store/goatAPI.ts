@@ -4,16 +4,19 @@ import axios from 'axios'
 export const useGoatStore = defineStore('user', () => {
   interface trackerData {
     T_ID: string
-    LOG_TIME: dateData
+    LOG_TIME: dateTimeData
     DURATION: timeData
     IMG_ID: string
     ID: string
     ACCUMULATION: timeData
   }
-  interface dateData {
+  interface dateTimeData {
     year: string
     month: string
     day: string
+    hour: string
+    minute: string
+    second: string
   }
   interface timeData {
     hour: string
